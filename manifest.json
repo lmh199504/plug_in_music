@@ -1,0 +1,58 @@
+{
+
+    "manifest_version": 2,
+
+    "name": "美女专用",
+
+    "version": "1.0.0",
+
+    "update_url":"http://upext.chrome.360.cn/intf.php?method=ExtUpdate.query",
+
+    "description": "__MSG_pluginDesc__",
+
+    "icons":
+    {
+        "16": "images/icon1.png",
+        "48": "images/icon1.png",
+        "128": "images/icon1.png"
+    },
+
+    "background": {
+        "page": "background.html"
+    },
+
+
+    "chrome_url_overrides" : {
+        "newtab": "newTab.html"
+    },
+    "browser_action":
+    {
+        "default_icon": "images/icon1.png",
+        "default_title": "垃圾插件",
+        "default_popup": "popup.html"
+    },
+
+    "options_page": "options.html",
+    "content_scripts":
+    [
+        {
+
+            "matches": ["<all_urls>"],
+            //"js/jQuery.js","element/index.js","vue/vue.js","vue/axios.js",
+            "js": ["js/jQuery.js","js/cookies.js","js/content-script.js","js/axios.js","js/qs.js","/vue/vue.js","js/md5.js","element/index.js","js/xlsx.full.min.js","js/liveDetail.js"],
+
+            "css": ["css/custom.css","css/plugin.css"],
+
+            "run_at": "document_idle"
+        }
+    ],
+    "content_security_policy": "script-src 'self'  'unsafe-eval'  https://unpkg.com/ ; object-src 'self'  ; media-src 'self' http://ws.stream.qqmusic.qq.com/",
+
+    "permissions":[
+        "<all_urls>", "tabs", "activeTab", "notifications", "storage", "cookies", "background", "webNavigation", "webRequest", "webRequestBlocking"
+    ],
+
+    "web_accessible_resources": ["js/inject.js","images/icon2.png","img/demo-1-bg.jpg","images/icon.png","img/1.png"],
+
+    "default_locale": "zh_CN"
+}

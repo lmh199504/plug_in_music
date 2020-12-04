@@ -1,0 +1,86 @@
+{
+  "id": "1300007",
+  "name": "no name",
+  "font_family": "iconfont",
+  "css_prefix_text": "myicon",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "2380649",
+      "name": "排行",
+      "font_class": "paihang",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "5666416",
+      "name": "下载",
+      "font_class": "xiazai",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "11757077",
+      "name": "客服",
+      "font_class": "kefu",
+      "unicode": "e73a",
+      "unicode_decimal": 59194
+    },
+    {
+      "icon_id": "8328421",
+      "name": "黑名单",
+      "font_class": "heimingdan",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "774369",
+      "name": "公告",
+      "font_class": "gonggao",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "2321381",
+      "name": "优惠券",
+      "font_class": "youhuiquan",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "3588489",
+      "name": "商品",
+      "font_class": "shangpin",
+      "unicode": "e6e2",
+      "unicode_decimal": 59106
+    },
+    {
+      "icon_id": "933709",
+      "name": "数据",
+      "font_class": "shuju",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "1854597",
+      "name": "符号-锁",
+      "font_class": "suo",
+      "unicode": "e6ac",
+      "unicode_decimal": 59052
+    },
+    {
+      "icon_id": "309925",
+      "name": "mima",
+      "font_class": "mima",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "6512625",
+      "name": "账号",
+      "font_class": "zhanghao",
+      "unicode": "e678",
+      "unicode_decimal": 59000
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+.mycard{
+  height:93px;
+  background: #f2f2f2; 
+  margin-bottom: 10px;
+  cursor: pointer;
+  text-align: center;
+  padding: 15px;
+  user-select: none;
+}
+
+.mycard:hover{
+  background: rgb(255, 40, 81);
+  color: #fff;
+}
+
+.mycard:hover .iconfont{
+  color: #fff;
+}
+
+.mycard .iconfont{
+  color: rgb(93, 100, 111);
+  font-size: 30px;
+}
+
+#myapp .el-dialog__body{
+  padding: 0 20px;
+}
+
+.bindCoupon{
+  cursor: pointer;
+
+}
+.bindCoupon:hover{
+  color: rgb(64, 170, 255);
+}
+.el-textarea__inner{
+  height: 150px;
+}
