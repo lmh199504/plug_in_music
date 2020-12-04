@@ -445,8 +445,6 @@ function RiQi(sj){
 
 
 $(".div-textarea").on('focus',function(e){
-
-    
     $(document).keydown(function(event){
       if(event.keyCode == 13){
         event.preventDefault();
@@ -515,3 +513,13 @@ function getTuLingHf(msg){
         })
     })
 }
+
+
+
+
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
+	if(request.cmd == 'play'){
+		sendResponse('I konw the progress by content-script')
+	}
+})

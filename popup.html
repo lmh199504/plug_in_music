@@ -4,17 +4,17 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<script src="./js/jQuery.js"></script>
-	
+	<!-- <meta name="referrer" content="always"/> -->
 	<link rel="stylesheet" href="./css/popup.css">
-	<script src='./vue/vue.js'></script>
+	<script src="./vue/vue.js"></script>
 	<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script> 
 	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 	<!-- <link rel="stylesheet" href="./element/index.css"> -->
 
 
 
-
-
+	<script src="./js/js_base64.js" charset="utf-8"></script>
+	<script src="./js/lyricParse.js" type="text/javascript" charset="utf-8"></script>
 	<script src="./element/index.js"></script>
 	<script src="./vue/axios.js"></script>
 	<script src="./vue/qs.js"></script>
@@ -76,36 +76,38 @@
 
 		<div style="text-align:center;">
 			<el-tabs v-model="activeName" @tab-click="topTabClick">
-			 	<el-tab-pane label="当前播放" name="first" :lazy='true'>
+			 	<el-tab-pane label="当前播放" name="first" :lazy="true">
 					<div class="topTabContent">
 						<div class="background" :style='{"background-image":"url("+coverImg+")"}'></div>
 						<div :class="{'mask':coverImg != '' }"></div>
 
 						<div class="hasMusic" v-if="coverImg != ''">
 
-							<div class="musicMessage">
-								<div class="musicName">歌曲：{{musicMessage.songname}}</div>
-								<div class="musicSinger">演唱：{{musicMessage.artistname}}</div>
-
-							</div>
-							<div class="musicImg">
-								<img :src="coverImg" alt="" :class="{'currentMusicImg':true,'imgRortation':true,'rotate-pause':!isplay}">
-							</div>
-
-							<div class="progress">
-								<div style="text-align: left;margin-bottom:10px;color:#fff;">{{currentTime}} / {{duration}}</div>
-								<el-progress :percentage="progress" :show-text="false" @click="seak"></el-progress>
-							</div>
-							<div class="smallBtn">
-								<div class="isLike" v-if="isLike" @click="addMyLike">
-									<img src="./images/like.png" alt="">
-								</div>
-								<div class="isLike" v-if="!isLike" @click="addMyLike">
-									<img src="./images/nolike.png" alt="">
-								</div>
-						<!-- 		<div class="isLike" @click="downMusic">
-                                 	<img src="./images/likedown.png" alt="">
-								</div> -->
+							<div v-if="!show_lyric" @click="show_lyric = !show_lyric">
+								<div class="musicMessage">
+										<div class="musicName">歌曲：{{musicMessage.songname}}</div>
+										<div class="musicSinger">演唱：{{musicMessage.artistname}}</div>
+								
+									</div>
+									<div class="musicImg">
+										<img :src="coverImg" alt="" :class="{'currentMusicImg':true,'imgRortation':true,'rotate-pause':!isplay}">
+									</div>
+								
+									<div class="progress">
+										<div style="text-align: left;margin-bottom:10px;color:#fff;">{{currentTime}} / {{duration}}</div>
+										<el-progress :percentage="progress" :show-text="false" @click="seak"></el-progress>
+									</div>
+									<div class="smallBtn">
+										<div class="isLike" v-if="isLike" @click="addMyLike">
+											<img src="./images/like.png" alt="">
+										</div>
+										<div class="isLike" v-if="!isLike" @click="addMyLike">
+											<img src="./images/nolike.png" alt="">
+										</div>
+								<!-- 		<div class="isLike" @click="downMusic">
+								         	<img src="./images/likedown.png" alt="">
+										</div> -->
+									</div>
 							</div>
 
 							<div class="musicControll">
@@ -127,12 +129,19 @@
 						</div>
 						
 						
+						<div class="lyric_content" v-if="show_lyric" @click="show_lyric = !show_lyric">
+							歌词
+						</div>
+						
 						<div class="noMusic" v-if="coverImg == ''">
 							暂无歌曲
 						</div>
 					</div>
+					
+
+					
 			 	</el-tab-pane>
-			    <el-tab-pane label="我的收藏" name="second" :lazy='true'>
+			    <el-tab-pane label="我的收藏" name="second" :lazy="true">
 					
 					<div class="topTabContent">
 						<div class="likePlayAll" @click="playAll('mylike')">
@@ -165,7 +174,7 @@
 						</ul>	
 					</div>
 			    </el-tab-pane>
-			    <el-tab-pane label="歌单推荐" name="third" :lazy='true'>
+			    <el-tab-pane label="歌单推荐" name="third" :lazy="true">
 					<div class="topTabContent">
 						<div :class="{'leftSlide':true,'leftSlide_active':leftSlide_active}" style="position:fixed;z-index: 6666;">
 							<div class="topmenu">
@@ -211,7 +220,7 @@
 						</div>
 					</div>
 			    </el-tab-pane>
-			    <el-tab-pane label="我喜欢的歌手" name="fourth" :lazy='true'>
+			    <el-tab-pane label="我喜欢的歌手" name="fourth" :lazy="true">
 					
 					<div class="topTabContent">
 						<div :class="{'leftSlide':true,'leftSlideSinger_active':leftSlideSinger_active}" style="position:fixed;z-index: 6666;">
@@ -280,7 +289,7 @@
 						</el-dialog>
 					</div>
 			    </el-tab-pane>
-			    <el-tab-pane label="相册" name="fifth" :lazy='true'>
+			    <el-tab-pane label="相册" name="fifth" :lazy="true">
 					<div class="topTabContent" style="background: url(../images/30.jpg);background-size: cover;">
 	
 
