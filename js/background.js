@@ -173,9 +173,34 @@ window.onload = function() {
 				res: vm._data.musicList[vm._data.musicIndex]
 			})
 
+		}else if(request.cmd == "popup_destroyed"){
+			console.log("popup_destroyedpopup_destroyedpopup_destroyedpopup_destroyedpopup_destroyedpopup_destroyed")
 		}
 
 	});
+
+
+	//伪造支付宝获取订单号 的来源
+	chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {
+			console.log(details)
+			var headers = details.requestHeaders
+			details.requestHeaders.push({
+				name: "Referer",
+				value: `https://c.y.qq.com/`
+			}
+			// , {
+			// 	name: "host",
+			// 	value: "c.y.qq.com"
+			// }
+			)
+			return {
+				requestHeaders: details.requestHeaders
+			}
+		}, {
+			urls: ["https://c.y.qq.com/*"]
+		},
+		["requestHeaders", "blocking", "extraHeaders"],
+	);
 
 
 
@@ -202,17 +227,23 @@ window.onload = function() {
 			this.getMyLike()
 			this.myaudio.onplay = function() {
 
-				that.timer = setInterval(function() {
-					chrome.runtime.sendMessage({
-							cmd: "play",
-							currentTime: that.myaudio.currentTime,
-							duration: that.myaudio.duration
-						},
-						function(response) {
-							console.log(response)
-						}
-					);
-				}, 1000)
+
+
+				try {
+					that.timer = setInterval(function() {
+						chrome.runtime.sendMessage({
+								cmd: "play",
+								currentTime: that.myaudio.currentTime,
+								duration: that.myaudio.duration
+							},
+							function(response) {
+								console.log(response)
+							}
+						);
+					}, 1000)
+				} catch (e) {
+					//TODO handle the exception
+				}
 
 			}
 
@@ -231,8 +262,34 @@ window.onload = function() {
 
 			}
 
+
+			this.myaudio.onerror = () => {
+				// this.$message({
+				// 	type:"error",
+				// 	message:"播放失败",
+
+				// })
+
+				chrome.runtime.sendMessage({
+						cmd: "playerror",
+					},
+					function(response) {
+						console.log(response)
+					}
+				);
+				console.log("播放失败")
+				setTimeout(() => {
+					this.musicIndex++;
+					if (this.musicIndex == this.musicList.length) {
+						this.musicIndex = 0;
+					}
+					this.playMusic(this.musicList[this.musicIndex]);
+				}, 2000)
+			}
 		},
 		methods: {
+
+			//播放音乐
 			playMusic(item) {
 				clearInterval(this.timer)
 				var url =
@@ -332,7 +389,7 @@ window.onload = function() {
 				})
 			},
 
-
+			//
 			randMusic(callback) {
 				var url =
 					'https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8¬ice=0&platform=h5&needNewCode=1&tpl=3&page=detail&type=top&topid=20&_=' +
@@ -365,6 +422,10 @@ window.onload = function() {
 				this.musicList = localLike;
 			},
 
+
+			getLyric() {
+
+			}
 		}
 	})
 }

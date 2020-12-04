@@ -154,6 +154,20 @@ window.onload = function(){
 			}
 
 		},
+		// destroyed() {
+		// 	chrome.runtime.sendMessage({cmd:"popup_destroyed"},
+		// 		function(response) {
+		// 			console.log(response)
+		// 		}
+		// 	);
+		// },
+		beforeDestroy() {
+			chrome.runtime.sendMessage({cmd:"popup_destroyed"},
+				function(response) {
+					console.log(response)
+				}
+			);
+		},
 		router:router,
 		mounted(){
 			console.log('mounted');
@@ -199,6 +213,12 @@ window.onload = function(){
 					that.musicMessage = request.item;
 					that.coverImg = request.item.img;
 					that.checkIsLike(that.musicMessage)
+					sendResponse("I know music change")
+				}else if(request.cmd == 'playerror'){
+					that.$message({
+						type:"error",
+						message:"歌曲播放错误，2s后播放下一首."
+					})
 				}
 				
 			})

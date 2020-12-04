@@ -58,6 +58,11 @@
 	-webkit-animation: rotation 30s linear infinite;
 	-o-animation: rotation 30s linear infinite;
 }
+
+.rotate-pause {
+    animation-play-state:paused;
+    -webkit-animation-play-state:paused; /* Safari 和 Chrome */
+}
 @-webkit-keyframes rotation {
 	from {
 		-webkit-transform: rotate(0deg);
