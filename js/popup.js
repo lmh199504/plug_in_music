@@ -221,6 +221,7 @@ window.onload = function() {
 						that.musicMessage = response.res;
 						that.coverImg = response.res.img;
 						that.checkIsLike(that.musicMessage)
+	
 					}
 
 				}
@@ -242,7 +243,7 @@ window.onload = function() {
 					that.progress = Number(((request.currentTime / request.duration) * 100).toFixed(1))
 					// console.log(request.currentTime,request.duration)
 
-
+					
 					that.currentTime_default = request.currentTime;
 					that.currentTime = (Math.floor(request.currentTime / 60) < 10 ? "0" + Math.floor(request.currentTime / 60) :
 						Math.floor(request.currentTime / 60)) + ":" + (Math.floor(request.currentTime % 60) < 10 ? '0' + Math.floor(
@@ -252,9 +253,12 @@ window.onload = function() {
 						60) : Math.floor(request.duration % 60));
 					that.isplay = true;
 					
-					// if(that.lyricPlayer){
-					// 	that.lyricPlayer.seek(that.currentTime_default * 1000);
-					// }
+					if(that.lyricPlayer){ //暂时这样处理
+						that.lyricPlayer.seek(that.currentTime_default * 1000);
+					}
+					if(!that.$scroller){
+						that.init_scroll()
+					}
 					sendResponse('I konw the progress.')
 				} else if (request.cmd == "playChange") {
 					that.musicMessage = request.item;
@@ -771,10 +775,12 @@ window.onload = function() {
 				if (lineNum > 4 && this.$scroller) {
 					this.$scroller.scrollToElement(this.$refs.lines[lineNum - 4], 1000)
 				}
-				else{
+				else if(this.$scroller){
 					this.$scroller.scrollTo(0, 0, 1000)
+				}else{
+					this.init_scroll()
 				}
-				console.log(this.$scroller)
+				// console.log(this.$scroller)
 				this.currentLine = lineNum
 
 			},
@@ -1030,11 +1036,13 @@ window.onload = function() {
 			}
 		},
 		watch:{
-			musicMessage(newVal){
-				if(newVal && newVal.songmid){
-					this.getLyr(newVal)
-				}
-				
+			musicMessage:{
+				handler:function(newVal){
+					if(newVal && newVal.songmid){
+						this.getLyr(newVal)
+					}
+				},
+				immediate:true
 			}
 		}
 

@@ -161,7 +161,8 @@ window.onload = function() {
 		} else if (request.cmd == "giveMeMusic") {
 			console.log(vm._data.musicList)
 			sendResponse({
-				res: vm._data.musicList[vm._data.musicIndex]
+				res: vm._data.musicList[vm._data.musicIndex],
+				currentTime:vm._data.myaudio.currentTime
 			})
 		} else if (request.cmd == "playAll") {
 
