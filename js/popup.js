@@ -106,13 +106,15 @@ window.onload = function() {
 			isplay: false,
 			musicMessage: null,
 			progress: 0,
+			currentTime_default: 0,
 			currentTime: '00:00',
 			duration: '00:00',
 			isLike: false,
 			mylocalLike: [],
+			currentLine: 0, // 当前条数
 			leftSlide_active: false,
-			lyricPlayer:null,  //歌词对象 控制歌词播放
-			show_lyric:false,
+			lyricPlayer: null, //歌词对象 控制歌词播放
+			show_lyric: true,
 			topList: [{
 				img: "./images/20.jpg",
 				id: 20,
@@ -170,6 +172,9 @@ window.onload = function() {
 		// },
 		updated() {
 
+		},
+		components:{
+			scroll
 		},
 		created() {
 			console.log('created');
@@ -237,12 +242,19 @@ window.onload = function() {
 					that.progress = Number(((request.currentTime / request.duration) * 100).toFixed(1))
 					// console.log(request.currentTime,request.duration)
 
+
+					that.currentTime_default = request.currentTime;
 					that.currentTime = (Math.floor(request.currentTime / 60) < 10 ? "0" + Math.floor(request.currentTime / 60) :
 						Math.floor(request.currentTime / 60)) + ":" + (Math.floor(request.currentTime % 60) < 10 ? '0' + Math.floor(
 						request.currentTime % 60) : Math.floor(request.currentTime % 60));
 					that.duration = (Math.floor(request.duration / 60) < 10 ? "0" + Math.floor(request.duration / 60) : Math.floor(
 						request.duration / 60)) + ":" + (Math.floor(request.duration % 60) < 10 ? '0' + Math.floor(request.duration %
 						60) : Math.floor(request.duration % 60));
+					that.isplay = true;
+					
+					// if(that.lyricPlayer){
+					// 	that.lyricPlayer.seek(that.currentTime_default * 1000);
+					// }
 					sendResponse('I konw the progress.')
 				} else if (request.cmd == "playChange") {
 					that.musicMessage = request.item;
@@ -262,11 +274,18 @@ window.onload = function() {
 			this.getMyLike()
 			this.getMyLikeSinger()
 			var history = localStorage.getItem('localList')
-
+			
+			this.init_scroll()
 		},
 		methods: {
 			seak(e) {
 				console.log(e)
+			},
+			init_scroll(){
+				setTimeout(() => {
+					let wrapper = document.querySelector('.lyric_content')
+					this.$scroller = new BScroll(wrapper)	
+				},200)
 			},
 			querySearchAsync(queryString, cb) {
 				if (queryString == '') {
@@ -276,8 +295,6 @@ window.onload = function() {
 				var url = 'https://c.y.qq.com/soso/fcgi-bin/client_search_cp?aggr=1&cr=1&flag_qc=0&p=1&n=10&w=' + queryString;
 				// console.log(url)
 				axios.get(url).then(response => {
-
-
 					this.restaurants = [];
 					if (JSON.parse(response.data.substring(9, response.data.length - 1)).subcode == 0) {
 						var list = JSON.parse(response.data.substring(9, response.data.length - 1)).data.song.list;
@@ -348,8 +365,7 @@ window.onload = function() {
 				}
 			},
 			handleSelect(item) {
-				// console.log(item);	
-				// this.playMusic(item.songmid)
+
 				this.activeName = 'first';
 				this.coverImg = item.img;
 				this.musicMessage = item;
@@ -374,8 +390,6 @@ window.onload = function() {
 					'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?format=json205361747&platform=yqq&cid=205361747&songmid=' +
 					songmid + '&filename=C400' + songmid + '.m4a&guid=126548448';
 				axios.get(url).then(res => {
-					console.log(res)
-
 					this.musicSrc = 'http://ws.stream.qqmusic.qq.com/' + res.data.data.items[0].filename +
 						'?fromtag=0&guid=126548448&vkey=' + res.data.data.items[0].vkey;
 					this.myAudio.src = this.musicSrc
@@ -386,6 +400,7 @@ window.onload = function() {
 			nextMusic() {
 				this.isplay = true;
 				var that = this;
+				
 				chrome.runtime.sendMessage({
 						cmd: "nextMusic"
 					},
@@ -395,6 +410,8 @@ window.onload = function() {
 						that.checkIsLike(that.musicMessage)
 					}
 				);
+
+				
 			},
 			prevMusic() {
 				this.isplay = true;
@@ -408,6 +425,7 @@ window.onload = function() {
 						that.checkIsLike(that.musicMessage)
 					}
 				);
+	
 			},
 			pauseMusic() {
 				this.isplay = !this.isplay;
@@ -418,6 +436,7 @@ window.onload = function() {
 						console.log('我已收到你的消息：' + response)
 					}
 				);
+				this.lyricPlayer.togglePlay()
 			},
 			continueMusic() {
 				this.isplay = !this.isplay;
@@ -428,10 +447,11 @@ window.onload = function() {
 						console.log('我已收到你的消息：' + response)
 					}
 				);
+				this.lyricPlayer.togglePlay()
 			},
 			topTabClick(tab, event) {
-				this.getMyLike()
-				console.log(tab, event);
+				this.getMyLike();
+				this.init_scroll();
 			},
 			checkIsLike(item) {
 				var localLike = JSON.parse(localStorage.getItem('localLike'))
@@ -587,13 +607,65 @@ window.onload = function() {
 				});
 			},
 			downMusic(item) {
-				var url =
-					'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?format=json205361747&platform=yqq&cid=205361747&songmid=' +
-					item.songmid + '&filename=C400' + item.songmid + '.m4a&guid=126548448';
-				axios.get(url).then(res => {
-
-					var downUrl = 'http://ws.stream.qqmusic.qq.com/' + res.data.data.items[0].filename +
-						'?fromtag=0&guid=126548448&vkey=' + res.data.data.items[0].vkey;
+				var url = 'https://u.y.qq.com/cgi-bin/musicu.fcg';
+				
+				var guid = '1429839143';
+				const data = {
+					req: {
+						module: "CDN.SrfCdnDispatchServer",
+						method: "GetCdnDispatch",
+						param: {
+							guid: guid,
+							calltype: 0,
+							userip: ""
+						}
+					},
+					req_0: {
+						module: "vkey.GetVkeyServer",
+						method: "CgiGetVkey",
+						param: {
+							guid: guid,
+							songmid: [item.songmid],
+							songtype: [0],
+							uin: "0",
+							loginflag: 1,
+							platform: "20"
+						}
+					},
+					comm: {
+						uin: 0,
+						format: "json",
+						ct: 24,
+						cv: 0
+					}
+				}
+				
+				const params = Object.assign({
+					format: 'json',
+					data: JSON.stringify(data),
+				});
+				axios.get(url,{
+					params
+				}).then(res => {
+					
+					let playLists = []; //可播放的列表
+					const req_0 = res.data.req_0.data;
+					req_0.sip.map(sipURL => {
+						const purl = req_0.midurlinfo[0].purl;
+						const URI = `${sipURL}${purl}`
+						playLists.push(URI);
+					});
+					
+					if(playLists.length == 0){
+						this.$message({
+							type:"error",
+							offset:300,
+							message:"下载失败"
+						})
+						return 
+					}
+					
+					var downUrl = playLists[0]
 					// window.open(downUrl)
 					var xhr = new XMLHttpRequest();
 					xhr.open('GET', downUrl);
@@ -695,8 +767,16 @@ window.onload = function() {
 				lineNum,
 				txt
 			}) {
-				console.log(lineNum)
-				console.log((txt));
+
+				if (lineNum > 4 && this.$scroller) {
+					this.$scroller.scrollToElement(this.$refs.lines[lineNum - 4], 1000)
+				}
+				else{
+					this.$scroller.scrollTo(0, 0, 1000)
+				}
+				console.log(this.$scroller)
+				this.currentLine = lineNum
+
 			},
 			getLyr(item) {
 				var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric.fcg?base64=1&musicid=' + item.songid +
@@ -706,13 +786,28 @@ window.onload = function() {
 					if (response.status === 200) {
 						var lyricstr = response.data.replace('jsonp1(', '')
 						var result = JSON.parse(lyricstr.slice(0, lyricstr.length - 1))
-						console.log({
-							lyric: Base64.decode(result.lyric)
-						})
+						// console.log({
+						// 	lyric: Base64.decode(result.lyric)
+						// })
 
-						this.lyricPlayer = new Lyric(Base64.decode(result.lyric), this.handleLyric);
+
+
+						//重置 lyricPlayer
+						if(this.$scroller){
+							this.$scroller.scrollTo(0, 0, 1000)
+						}
+						if(this.lyricPlayer){
+							this.lyricPlayer.stop()
+							this.lyricPlayer = null;
+						}
 						
+						this.currentLine = 0;
+						this.currentTime_default = 0;
+						
+						//end
+						this.lyricPlayer = new Lyric(Base64.decode(result.lyric), this.handleLyric);
 						this.lyricPlayer.play()
+						this.lyricPlayer.seek(this.currentTime_default * 1000)
 					}
 
 				})
@@ -934,6 +1029,14 @@ window.onload = function() {
 				});
 			}
 		},
+		watch:{
+			musicMessage(newVal){
+				if(newVal && newVal.songmid){
+					this.getLyr(newVal)
+				}
+				
+			}
+		}
 
 	})
 
@@ -947,3 +1050,5 @@ window.onload = function() {
 
 
 }
+
+

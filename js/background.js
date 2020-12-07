@@ -109,7 +109,7 @@ chrome.notifications.getPermissionLevel((level) => {
 
 })
 
-var vm ;
+var vm;
 window.onload = function() {
 	// 监听消息
 	chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -180,7 +180,7 @@ window.onload = function() {
 	});
 
 
-	
+
 
 
 	vm = new Vue({
@@ -209,15 +209,16 @@ window.onload = function() {
 
 
 				try {
-					
+
 					that.timer = setInterval(function() {
-						if(that.musicList.length === 0){
+						if (that.musicList.length === 0) {
 							return
 						}
 						chrome.runtime.sendMessage({
 								cmd: "play",
 								currentTime: that.myaudio.currentTime,
-								duration: that.myaudio.duration
+								duration: that.myaudio.duration,
+								currentSong: that.musicList[that.musicIndex]
 							},
 							function(response) {
 								console.log(response)
@@ -246,7 +247,7 @@ window.onload = function() {
 
 
 			this.myaudio.onerror = () => {
-				
+
 
 				setTimeout(() => {
 					if (this.musicList.length !== 0) {
@@ -257,8 +258,8 @@ window.onload = function() {
 						this.playMusic(this.musicList[this.musicIndex]);
 					}
 				}, 2000)
-				
-				if(this.musicList.length === 0 ){
+
+				if (this.musicList.length === 0) {
 					return;
 				}
 				chrome.runtime.sendMessage({

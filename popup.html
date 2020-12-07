@@ -1,209 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Document</title>
-	<script src="./js/jQuery.js"></script>
-	<!-- <meta name="referrer" content="always"/> -->
-	<link rel="stylesheet" href="./css/popup.css">
-	<script src="./vue/vue.js"></script>
-	<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script> 
-	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-	<!-- <link rel="stylesheet" href="./element/index.css"> -->
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<script src="./js/jQuery.js"></script>
+		<!-- <meta name="referrer" content="always"/> -->
+		<link rel="stylesheet" href="./css/popup.css">
+		<script src="./vue/vue.js"></script>
+		<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!-- <link rel="stylesheet" href="./element/index.css"> -->
+
+
+		<script src="./js/betterscroll.js"></script>
+		<script src="./js/scroll.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://unpkg.com/@better-scroll/core@latest/dist/core.min.js"></script>
+		<script src="./js/js_base64.js" charset="utf-8"></script>
+		<script src="./js/lyricParse.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./element/index.js"></script>
+		<script src="./vue/axios.js"></script>
+		<script src="./vue/qs.js"></script>
+		<script src="./js/jquery.dragsort.js"></script>
+		<script src="./js/mydrag.js"></script>
+		<script src="./js/popup.js"></script>
+		<!-- 路由 -->
+
+
+		<style>
 
 
 
-	<script src="./js/js_base64.js" charset="utf-8"></script>
-	<script src="./js/lyricParse.js" type="text/javascript" charset="utf-8"></script>
-	<script src="./element/index.js"></script>
-	<script src="./vue/axios.js"></script>
-	<script src="./vue/qs.js"></script>
-	<script src="./js/jquery.dragsort.js"></script>
-	<script src="./js/mydrag.js"></script>
-	<script src="./js/popup.js"></script>
-	<!-- 路由 -->
-	
-	
-	<style>
+		</style>
 
-		
-
-	</style>
-
-</head>
-<body>
-	<template id="musictype">
-		<div>
-			I am musicType
-		</div>
-		
-	</template>
-
-	<div id="app">
-		<div :class="{'login_box':true,'login_box_hide':login_box_hide}" style="">
-			<div class="login_bg" style="background:url(./images/lmz.png) 0 0;background-size: cover;">
-				
-				
-			</div>
-			<div class="login_mask">
-
-			</div>
-			<div style="width: 60%;margin:auto;margin-top:130px;">
-				<div class="demo-type" style="text-align: center;">
-				    <el-avatar :size="60" src="./images/lmz.png" @error="errorHandler">
-				      	<img src="./images/lmz.png"/>
-				    </el-avatar>
-			  	</div>
-				<el-input placeholder="请输入用户名" v-model="username" clearable style="margin-bottom:15px;" @focus="usernameFocus"></el-input>
-				
-				<el-input placeholder="请输入密码" v-model="password" show-password style="margin-bottom:15px;" @focus="passwordFocus"></el-input>
-				<br/>
-				<el-button type="primary" style="width: 100%;" @click="myLogin()">登陆</el-button>
+	</head>
+	<body>
+		<template id="musictype">
+			<div>
+				I am musicType
 			</div>
 
-		</div>
-		
+		</template>
+
+		<div id="app">
+			<div :class="{'login_box':true,'login_box_hide':login_box_hide}" style="">
+				<div class="login_bg" style="background:url(./images/lmz.png) 0 0;background-size: cover;">
 
 
-		<el-autocomplete class="searchInput"
-		  v-model="state"
-		  :fetch-suggestions="querySearchAsync"
-		  placeholder="请搜索歌曲/歌手"
-		  @select="handleSelect"
-		></el-autocomplete>
-		
+				</div>
+				<div class="login_mask">
+
+				</div>
+				<div style="width: 60%;margin:auto;margin-top:130px;">
+					<div class="demo-type" style="text-align: center;">
+						<el-avatar :size="60" src="./images/lmz.png" @error="errorHandler">
+							<img src="./images/lmz.png" />
+						</el-avatar>
+					</div>
+					<el-input placeholder="请输入用户名" v-model="username" clearable style="margin-bottom:15px;" @focus="usernameFocus"></el-input>
+
+					<el-input placeholder="请输入密码" v-model="password" show-password style="margin-bottom:15px;" @focus="passwordFocus"></el-input>
+					<br />
+					<el-button type="primary" style="width: 100%;" @click="myLogin()">登陆</el-button>
+				</div>
+
+			</div>
 
 
-		<div style="text-align:center;">
-			<el-tabs v-model="activeName" @tab-click="topTabClick">
-			 	<el-tab-pane label="当前播放" name="first" :lazy="true">
-					<div class="topTabContent">
-						<div class="background" :style='{"background-image":"url("+coverImg+")"}'></div>
-						<div :class="{'mask':coverImg != '' }"></div>
 
-						<div class="hasMusic" v-if="coverImg != ''">
+			<el-autocomplete class="searchInput" v-model="state" :fetch-suggestions="querySearchAsync" placeholder="请搜索歌曲/歌手"
+			 @select="handleSelect"></el-autocomplete>
 
-							<div v-if="!show_lyric" @click="show_lyric = !show_lyric">
-								<div class="musicMessage">
-										<div class="musicName">歌曲：{{musicMessage.songname}}</div>
-										<div class="musicSinger">演唱：{{musicMessage.artistname}}</div>
-								
+
+
+			<div style="text-align:center;">
+				<el-tabs v-model="activeName" @tab-click="topTabClick">
+					<el-tab-pane label="当前播放" name="first" :lazy="true">
+						<div class="topTabContent">
+							<div class="background" :style='{"background-image":"url("+coverImg+")"}'></div>
+							<div :class="{'mask':coverImg != '' }"></div>
+
+							<div class="hasMusic" v-show="coverImg != ''">
+
+								<div v-show="!show_lyric" @click="show_lyric = !show_lyric" class="song_msg_content">
+									<div class="musicMessage">
+										<div class="musicName">歌曲：{{ musicMessage&& musicMessage.songname}}</div>
+										<div class="musicSinger">演唱：{{ musicMessage&& musicMessage.artistname}}</div>
+
 									</div>
 									<div class="musicImg">
 										<img :src="coverImg" alt="" :class="{'currentMusicImg':true,'imgRortation':true,'rotate-pause':!isplay}">
 									</div>
-								
-									<div class="progress">
-										<div style="text-align: left;margin-bottom:10px;color:#fff;">{{currentTime}} / {{duration}}</div>
-										<el-progress :percentage="progress" :show-text="false" @click="seak"></el-progress>
-									</div>
-									<div class="smallBtn">
-										<div class="isLike" v-if="isLike" @click="addMyLike">
-											<img src="./images/like.png" alt="">
+								</div>
+
+
+
+								<div class="lyric_content"  v-show="show_lyric"  @click="show_lyric = !show_lyric">
+									<div class="content">
+										<div v-if="lyricPlayer">
+											<p v-for="(item,index) in lyricPlayer.lines" ref="lines" :class="{'active':index == currentLine}">{{item.txt}}</p>
 										</div>
-										<div class="isLike" v-if="!isLike" @click="addMyLike">
-											<img src="./images/nolike.png" alt="">
-										</div>
-								<!-- 		<div class="isLike" @click="downMusic">
-								         	<img src="./images/likedown.png" alt="">
-										</div> -->
 									</div>
-							</div>
-
-							<div class="musicControll">
-								<div class="prevMusic" @click="prevMusic">
-									<img src="./images/prev.png" alt="">
-								</div>
-								<div v-if="!isplay" @click="continueMusic" class="continueMusic">
-									<img src="./images/play.png" alt="">
 								</div>
 								
-								<div v-if="isplay" @click="pauseMusic" class="pauseMusic">
-									<img src="./images/pause.png" alt="">
-								</div>
-								
-								<div class="nextMusic" @click="nextMusic">
-									<img src="./images/next.png" alt="">
-								</div>
-							</div>
-						</div>
-						
-						
-						<div class="lyric_content" v-if="show_lyric" @click="show_lyric = !show_lyric">
-							歌词
-						</div>
-						
-						<div class="noMusic" v-if="coverImg == ''">
-							暂无歌曲
-						</div>
-					</div>
-					
+								<!-- <scroll class="middle-r" ref="lyricList" :data="currentLyric && currentLyric.lines">
+								    <div class="lyric-wrapper">
+								        <div v-if="currentLyric">
+								            <p ref="lyricLine" class="text" :class="{ current: currentLineNum === index }" v-for="(line, index) in currentLyric.lines" :key="index">
+								                {{ line.txt }}
+								            </p>
+								        </div>
+								        <div class="pure-music" v-show="isPureMusic">
+								            <p>{{ pureMusicLyric }}</p>
+								        </div>
+								    </div>
+								</scroll> -->
 
-					
-			 	</el-tab-pane>
-			    <el-tab-pane label="我的收藏" name="second" :lazy="true">
-					
-					<div class="topTabContent">
-						<div class="likePlayAll" @click="playAll('mylike')">
-							<img src="./images/likeplay.png" alt=""><span style="margin-left:20px;">播放全部</span>
-						</div>
-						<ul class="myLikeList">
-							<li v-for="item in mylocalLike" :key="item.songmid">
-								<div style="margin-left: 15px;">
-									<img :src="item.img" alt="" class="likeImg">
+
+								<div class="progress">
+									<div style="text-align: left;margin-bottom:10px;color:#fff;">{{currentTime}} / {{duration}}</div>
+									<el-progress :percentage="progress" :show-text="false" @click="seak"></el-progress>
 								</div>
-								
-								<div style="margin-left: 14px;">
-									<span style="font-size: 15px;">{{item.songname}}</span>
-									<br>
-									<span style="font-size: 10px;color:#a29e9e;">{{item.artistname}}</span>
+								<div class="smallBtn">
+									<div class="isLike" v-if="isLike" @click="addMyLike">
+										<img src="./images/like.png" alt="">
+									</div>
+									<div class="isLike" v-if="!isLike" @click="addMyLike">
+										<img src="./images/nolike.png" alt="">
+									</div>
+									<!-- 		<div class="isLike" @click="downMusic">
+							         	<img src="./images/likedown.png" alt="">
+									</div> -->
 								</div>
 
-								<div class="likeControll">
-									<div class="likePlay likeControll_btn" @click="handleSelect(item)">
-										<img src="./images/likeplay.png" alt="">
+								<div class="musicControll">
+									<div class="prevMusic" @click="prevMusic">
+										<img src="./images/prev.png" alt="">
 									</div>
-									<div class="likeDel likeControll_btn" @click="delLike(item)">
-										<img src="./images/likedel.png" alt="">
+									<div v-if="!isplay" @click="continueMusic" class="continueMusic">
+										<img src="./images/play.png" alt="">
 									</div>
-									<div class="likeDown likeControll_btn">
-										<img src="./images/likedown.png" alt="" @click="downMusic(item)">
+
+									<div v-if="isplay" @click="pauseMusic" class="pauseMusic">
+										<img src="./images/pause.png" alt="">
+									</div>
+
+									<div class="nextMusic" @click="nextMusic">
+										<img src="./images/next.png" alt="">
 									</div>
 								</div>
-							</li>
-						</ul>	
-					</div>
-			    </el-tab-pane>
-			    <el-tab-pane label="歌单推荐" name="third" :lazy="true">
-					<div class="topTabContent">
-						<div :class="{'leftSlide':true,'leftSlide_active':leftSlide_active}" style="position:fixed;z-index: 6666;">
-							<div class="topmenu">
-								<div class="likePlayAll" @click="playAll('tuijian')" style="float: left;width: 50%;">
-									<img src="./images/likeplay.png" alt=""><span style="margin-left:20px;">播放全部</span>
-								</div>
-								<i class="el-icon-close topmenu_close" @click="leftSlide_active = false"></i>
 							</div>
-							<ul class="myLikeList" style="margin-top: 25px;">
-								<li v-for="item in slideMusicList" :key="item.songmid">
+
+
+
+
+							<div class="noMusic" v-if="coverImg == ''">
+								暂无歌曲
+							</div>
+						</div>
+
+
+
+					</el-tab-pane>
+					<el-tab-pane label="我的收藏" name="second" :lazy="true">
+
+						<div class="topTabContent">
+							<div class="likePlayAll" @click="playAll('mylike')">
+								<img src="./images/likeplay.png" alt=""><span style="margin-left:20px;">播放全部</span>
+							</div>
+							<ul class="myLikeList">
+								<li v-for="item in mylocalLike" :key="item.songmid">
 									<div style="margin-left: 15px;">
 										<img :src="item.img" alt="" class="likeImg">
 									</div>
-									
+
 									<div style="margin-left: 14px;">
 										<span style="font-size: 15px;">{{item.songname}}</span>
 										<br>
 										<span style="font-size: 10px;color:#a29e9e;">{{item.artistname}}</span>
 									</div>
-							
+
 									<div class="likeControll">
 										<div class="likePlay likeControll_btn" @click="handleSelect(item)">
 											<img src="./images/likeplay.png" alt="">
 										</div>
-										<div class="isLike likeControll_btn" v-if="item.islike" @click="tjAddLove(item)">
-											<img src="./images/like.png" alt="">
-										</div>
-										<div class="isLike likeControll_btn" v-if="!item.islike" @click="tjAddLove(item)">
-											<img src="./images/tjnolike.png" alt="">
+										<div class="likeDel likeControll_btn" @click="delLike(item)">
+											<img src="./images/likedel.png" alt="">
 										</div>
 										<div class="likeDown likeControll_btn">
 											<img src="./images/likedown.png" alt="" @click="downMusic(item)">
@@ -212,88 +193,124 @@
 								</li>
 							</ul>
 						</div>
-						<div class="lmh_container">
-							<div class="dragitem" v-for="item in topList" :key="item.img" @click="getSongList(item)">
-								<img :src="item.img" alt="" style="width: 100%;height: 100%;">
-								<!-- <span>{{item.id}}</span> -->
-							</div>
-						</div>
-					</div>
-			    </el-tab-pane>
-			    <el-tab-pane label="我喜欢的歌手" name="fourth" :lazy="true">
-					
-					<div class="topTabContent">
-						<div :class="{'leftSlide':true,'leftSlideSinger_active':leftSlideSinger_active}" style="position:fixed;z-index: 6666;">
-							<div class="topmenu">
-								<div class="likePlayAll" @click="playAll('singerSonger')" style="float: left;width: 50%;">
-									<img src="./images/likeplay.png" alt=""><span style="margin-left:20px;">播放全部</span>
+					</el-tab-pane>
+					<el-tab-pane label="歌单推荐" name="third" :lazy="true">
+						<div class="topTabContent">
+							<div :class="{'leftSlide':true,'leftSlide_active':leftSlide_active}" style="position:fixed;z-index: 6666;">
+								<div class="topmenu">
+									<div class="likePlayAll" @click="playAll('tuijian')" style="float: left;width: 50%;">
+										<img src="./images/likeplay.png" alt=""><span style="margin-left:20px;">播放全部</span>
+									</div>
+									<i class="el-icon-close topmenu_close" @click="leftSlide_active = false"></i>
 								</div>
-								<i class="el-icon-close topmenu_close" @click="leftSlideSinger_active = false"></i>
-							</div>
-							<ul class="myLikeList" style="margin-top: 25px;">
-								<li v-for="item in singerSong" :key="item.songmid">
-									<div style="margin-left: 15px;">
-										<img :src="item.img" alt="" class="likeImg">
-									</div>
-									
-									<div style="margin-left: 14px;">
-										<span style="font-size: 15px;">{{item.songname}}</span>
-										<br>
-										<span style="font-size: 10px;color:#a29e9e;">{{item.artistname}}</span>
-									</div>
-							
-									<div class="likeControll">
-										<div class="likePlay likeControll_btn" @click="handleSelect(item)">
-											<img src="./images/likeplay.png" alt="">
+								<ul class="myLikeList" style="margin-top: 25px;">
+									<li v-for="item in slideMusicList" :key="item.songmid">
+										<div style="margin-left: 15px;">
+											<img :src="item.img" alt="" class="likeImg">
 										</div>
-										<div class="isLike likeControll_btn" v-if="item.islike" @click="tjAddLove(item)">
-											<img src="./images/like.png" alt="">
-										</div>
-										<div class="isLike likeControll_btn" v-if="!item.islike" @click="tjAddLove(item)">
-											<img src="./images/tjnolike.png" alt="">
-										</div>
-										<div class="likeDown likeControll_btn">
-											<img src="./images/likedown.png" alt="" @click="downMusic(item)">
-										</div>
-									</div>
-								</li>
-							</ul>
-						</div>
-						<div class="lmh_container">
-							<div class="dragitem" v-for="item in likeSingerList" :key="item.img" >
-								<i class="el-icon-circle-close" style="position:absolute;top:10px;right: 10px;z-index: 6;color:rgb(178, 178, 178);" @click="delLikeSinger(item)"></i>
-								<h1 style="z-index: 4;">{{item.name}}</h1>
-								<img :src="item.img" alt="" style="width: 100%;height: 100%;position:absolute;top:0;left: 0;" @click="getSingerSong(item)">
-								<!-- <span>{{item.id}}</span> -->
-							</div>
 
-							<div class="dragitem" style="background:gray;" @click="addSinger">
-								<i class="el-icon-plus"></i>
-								添加歌手
+										<div style="margin-left: 14px;">
+											<span style="font-size: 15px;">{{item.songname}}</span>
+											<br>
+											<span style="font-size: 10px;color:#a29e9e;">{{item.artistname}}</span>
+										</div>
 
+										<div class="likeControll">
+											<div class="likePlay likeControll_btn" @click="handleSelect(item)">
+												<img src="./images/likeplay.png" alt="">
+											</div>
+											<div class="isLike likeControll_btn" v-if="item.islike" @click="tjAddLove(item)">
+												<img src="./images/like.png" alt="">
+											</div>
+											<div class="isLike likeControll_btn" v-if="!item.islike" @click="tjAddLove(item)">
+												<img src="./images/tjnolike.png" alt="">
+											</div>
+											<div class="likeDown likeControll_btn">
+												<img src="./images/likedown.png" alt="" @click="downMusic(item)">
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="lmh_container">
+								<div class="dragitem" v-for="item in topList" :key="item.img" @click="getSongList(item)">
+									<img :src="item.img" alt="" style="width: 100%;height: 100%;">
+									<!-- <span>{{item.id}}</span> -->
+								</div>
 							</div>
 						</div>
+					</el-tab-pane>
+					<el-tab-pane label="我喜欢的歌手" name="fourth" :lazy="true">
+
+						<div class="topTabContent">
+							<div :class="{'leftSlide':true,'leftSlideSinger_active':leftSlideSinger_active}" style="position:fixed;z-index: 6666;">
+								<div class="topmenu">
+									<div class="likePlayAll" @click="playAll('singerSonger')" style="float: left;width: 50%;">
+										<img src="./images/likeplay.png" alt=""><span style="margin-left:20px;">播放全部</span>
+									</div>
+									<i class="el-icon-close topmenu_close" @click="leftSlideSinger_active = false"></i>
+								</div>
+								<ul class="myLikeList" style="margin-top: 25px;">
+									<li v-for="item in singerSong" :key="item.songmid">
+										<div style="margin-left: 15px;">
+											<img :src="item.img" alt="" class="likeImg">
+										</div>
+
+										<div style="margin-left: 14px;">
+											<span style="font-size: 15px;">{{item.songname}}</span>
+											<br>
+											<span style="font-size: 10px;color:#a29e9e;">{{item.artistname}}</span>
+										</div>
+
+										<div class="likeControll">
+											<div class="likePlay likeControll_btn" @click="handleSelect(item)">
+												<img src="./images/likeplay.png" alt="">
+											</div>
+											<div class="isLike likeControll_btn" v-if="item.islike" @click="tjAddLove(item)">
+												<img src="./images/like.png" alt="">
+											</div>
+											<div class="isLike likeControll_btn" v-if="!item.islike" @click="tjAddLove(item)">
+												<img src="./images/tjnolike.png" alt="">
+											</div>
+											<div class="likeDown likeControll_btn">
+												<img src="./images/likedown.png" alt="" @click="downMusic(item)">
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="lmh_container">
+								<div class="dragitem" v-for="item in likeSingerList" :key="item.img">
+									<i class="el-icon-circle-close" style="position:absolute;top:10px;right: 10px;z-index: 6;color:rgb(178, 178, 178);"
+									 @click="delLikeSinger(item)"></i>
+									<h1 style="z-index: 4;">{{item.name}}</h1>
+									<img :src="item.img" alt="" style="width: 100%;height: 100%;position:absolute;top:0;left: 0;" @click="getSingerSong(item)">
+									<!-- <span>{{item.id}}</span> -->
+								</div>
+
+								<div class="dragitem" style="background:gray;" @click="addSinger">
+									<i class="el-icon-plus"></i>
+									添加歌手
+
+								</div>
+							</div>
 
 
 
-						<el-dialog
-						  	title="添加歌手"
-						  	:visible.sync="addSingerDialog"
-						  	width="80%"
-						  	:before-close="addSingerClose">
-						  	<el-input v-model="addSingerName" placeholder="请输入内容"></el-input>
-						  	<span slot="footer" class="dialog-footer">
-						    	<el-button @click="addSingerDialog = false">取 消</el-button>
-						    	<el-button type="primary" @click="addSingerBtnOk()">确 定</el-button>
-						  	</span>
-						</el-dialog>
-					</div>
-			    </el-tab-pane>
-			    <el-tab-pane label="相册" name="fifth" :lazy="true">
-					<div class="topTabContent" style="background: url(../images/30.jpg);background-size: cover;">
-	
+							<el-dialog title="添加歌手" :visible.sync="addSingerDialog" width="80%" :before-close="addSingerClose">
+								<el-input v-model="addSingerName" placeholder="请输入内容"></el-input>
+								<span slot="footer" class="dialog-footer">
+									<el-button @click="addSingerDialog = false">取 消</el-button>
+									<el-button type="primary" @click="addSingerBtnOk()">确 定</el-button>
+								</span>
+							</el-dialog>
+						</div>
+					</el-tab-pane>
+					<el-tab-pane label="相册" name="fifth" :lazy="true">
+						<div class="topTabContent" style="background: url(../images/30.jpg);background-size: cover;">
 
-							
+
+
 
 							<div class="box">
 								<ul class="minbox">
@@ -314,41 +331,21 @@
 								</ol>
 							</div>
 							<div class="m-main">
-									<!-- <div class="player">
-										<a href="javascript:void(0)" rel="external nofollow" rel="external nofollow" id="js-play">
-											<img src="../images/likeplay.png" alt="" id="img1"/>
-										</a>
-										<a href="javascript:void(0)" rel="external nofollow" rel="external nofollow" id="js-pause">
-											<img src="../images/pause.png" alt="" id="img2"/>
-										</a>
-										<div class="play-box">
-											<div class="left">
-												<p class="timeline"><span style=""></span></p>
-												<div class="info">
-													<span class="size">00:00</span>
-													<span class="timeshow">00:00</span>
-												</div>
-											</div>
-										</div>
-									</div> -->
-									<!-- <div class="video">
-										<video controls autoplay name="media" id="js-video"><source src="http://chipsguide.snaillove.com/Public/Uploads/file_server_storage/Audio/2017/03/23/19/192_20003137.mp3" type="video/mp4">
-										</video>
-									</div> -->
-								</div>
+
 							</div>
-					</div>
-			    </el-tab-pane>
+						</div>
+			</div>
+			</el-tab-pane>
 			</el-tabs>
 
 
 		</div>
-		
+
 		<audio src="" ref="myaudio" autoplay></audio>
-	</div>
+		</div>
 
 
 
 
-</body>
+	</body>
 </html>

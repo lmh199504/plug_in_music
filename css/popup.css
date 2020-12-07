@@ -86,6 +86,28 @@
 }
 
 
+.song_msg_content,.lyric_content{
+	height: 220px;
+}
+.lyric_content{
+	overflow-x: hidden;
+	overflow-y: hidden;
+	padding-top: 20px;
+	box-sizing: border-box;
+}
+.lyric_content p{
+	transition: all 0.4s ease;
+	color: #FFFDEF;
+	font-size: 14px;
+	line-height: 30px;
+}
+.lyric_content .active{
+	color: #00FF00;
+	font-size: 16px;
+}
+.lyric_content .content{
+	min-height: 300px;
+}
 .continueMusic img,.pauseMusic img{
 	vertical-align: 5px;
 	width: 50px;
@@ -99,13 +121,13 @@
 .musicMessage .musicName{
 	color: #fff;
 	font-size: 20px;
-	margin-top: 10px;
+	/* margin-top: 10px; */
 	margin-bottom: 10px;
 }
 
 .hasMusic .progress{
 	padding: 0 30px;
-	margin-top: 40px;
+	margin-top: 20px;
 }
 /* .smallBtn{
 	display: flex;
