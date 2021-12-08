@@ -73,10 +73,6 @@ window.onload = function() {
 					name: "Referer",
 					value: `https://c.y.qq.com/`
 				}
-				// , {
-				// 	name: "host",
-				// 	value: "c.y.qq.com"
-				// }
 			)
 
 			console.log(details)
@@ -86,7 +82,7 @@ window.onload = function() {
 		}, {
 			urls: ["https://c.y.qq.com/*"]
 		},
-		["requestHeaders", "blocking", "extraHeaders"],
+		["requestHeaders", "blocking"],
 	);
 
 
